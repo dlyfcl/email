@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			<%= title %>
+		</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>欢迎使用Dmail系统！</h1>
+			<form action="">
+				<span>邮件名：</span>
+				<input type="text" name="mailname" id="mailname" value="" /><br />
+				<span>收件人：</span>
+				<input type="text" name="receiver" id="receiver" value="" /><br />
+				<span>邮件内容：</span><br />
+				<textarea id="mailContent" rows="5" cols=""></textarea><br />
+				<input type="button" name="send" id="send" value="发送邮件" />
+			</form>
+			<script src="http://code.jquery.com/jquery-latest.js"></script>
+			<script>
+				$(function(){
+					$('#send').on('click',function(){
+						var date = new Date().toLocaleString();
+						$.ajax({
+							type:'post',
+							url:"/mails/send",
+							data:{
+								'title':$('#mailname').val(),
+								'address':$('#receiver').val(),
+								'content':$('#mailContent').val(),
+								'date':date
+							},
+							async:false,
+							error:function(){
+								alert('服务器访问错误！')
+							},
+							success:function(data){
+								alert(data);
+								if(data === 'success'){
+									location.href = 'http://127.0.0.1:3000/main';
+								}else{
+									$('#receiver').val('');
+								}
+							}
+						});
+					});
+				})
+			</script>
+		</div>
+	</body>
+
+</html>

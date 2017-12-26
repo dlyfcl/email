@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			<%= title %>
+		</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>欢迎注册Dmail系统！</h1>
+			<form action="">
+				<span>用&nbsp;户&nbsp;名：</span>
+				<input type="text" name="username" id="username" value="" /><br />
+				<span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</span>
+				<input type="password" name="password" id="password" value="" /><br />
+				<span>重复密码：</span>
+				<input type="password" name="repassword" id="repassword" value="" /><br />
+				<input type="button" name="sub" id="sub" value="注册" />
+			</form>
+			<div>
+				<span>已有账号？<a href="/user/login">点击这里</a>登录！</span>
+			</div>
+		</div>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script>
+			$(function(){
+				$('#sub').on('click',function(){
+					var pwd = $('#password').val();
+					var repwd = $('#repassword').val();
+					console.log(pwd);
+					if(pwd === repwd){
+						$.ajax({
+							type:'post',
+							url:"/users/register",
+							data:{
+								'username':$('#username').val(),
+								'password':pwd,
+								'sub':'注册'
+							},
+							async:false,
+							error:function(){
+								alert('服务器访问错误！')
+							},
+							success:function(data){
+								if(data !== 'username_existed'){
+									window.location.href = data;
+								}else{
+									alert(data);
+								}
+							}
+						});
+					}else{
+						alert('两次密码输入不一致，请重新输入');
+					}	
+				});
+				
+			})
+		</script>
+	</body>
+
+</html>

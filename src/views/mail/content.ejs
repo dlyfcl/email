@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			<%= title %>
+		</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>欢迎使用Dmail系统！</h1>
+			<div>
+				<span>邮件名：</span>
+				<span id="mailname"></span><br />
+				<span>发件人：</span>
+				<span id="senduser"></span>
+				<span>发送时间：</span>
+				<span id="time"></span><br />
+				<span>邮件内容：</span>
+				<p id="mainContent"></p>
+			</div>
+			<a href="/mail">返回邮件列表</a>
+		</div>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script>
+			$(function(){
+				if(window.sessionStorage.getItem('mail')){
+					var data = window.sessionStorage.getItem('mail');
+					data = JSON.parse(data);
+					console.log(data);
+					$('#mailname').html(data.title);
+					$('#senduser').html(data.sender);
+					$('#time').html(data.date);
+					$('#mainContent').html(data.content);
+					$.ajax({
+						type:'post',
+						url:'/mails/' + data.id,
+						'data':data,
+						async:false,
+						error:function(){
+							alert('服务器访问错误！');
+						},
+						success:function(data){
+							console.log(data);
+						}
+					});
+				}else{
+					alert('访问错误');
+				}
+			});
+		</script>
+	</body>
+
+</html>

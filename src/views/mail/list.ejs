@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			<%= title %>
+		</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<style>
+			tbody tr:hover{
+				background: #999;
+				cursor:pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>欢迎使用Dmail系统！</h1>
+			<div>
+				<table border="" cellspacing="" cellpadding="">
+					<thead>
+						<th>序号</th>
+						<th>标题</th>
+						<th>发件人</th>
+						<th>发送时间</th>
+						<th>邮件状态</th>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+				<a href="/main">返回首页</a>
+			</div>
+		</div>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script>
+			$(function(){
+				var arr = [];
+				$.ajax({
+					type:'get',
+					url:"/mails",
+					async:false,
+					error:function(){
+						alert('服务器访问错误！');
+					},
+					success:function(data){
+						$.each(data,function(index,mail){
+							var trTamp = $('<tr></tr>');
+							trTamp.append('<td>' + (index + 1) + '</td>');
+							trTamp.append('<td>' + mail.title + '</td>');
+							trTamp.append('<td>' + mail.sender + '</td>');
+							trTamp.append('<td>' +mail.date + '</td>');
+							if(mail.state === '0'){
+								trTamp.append('<td>未读</td>');
+							}else{
+								trTamp.append('<td>已读</td>');
+							}
+							trTamp.on('click',function(){
+								var str = JSON.stringify(mail);
+								window.sessionStorage.setItem('mail',str);
+								location.href = '/mail/' + mail.id;
+							});
+							trTamp.appendTo($('tbody'));
+						});
+					}
+				})
+			});
+		</script>
+	</body>
+
+</html>

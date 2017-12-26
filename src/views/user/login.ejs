@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			<%= title %>
+		</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+
+	<body>
+		<div class="main">
+			<h1>欢迎来到Dmail系统！</h1>
+			<form action="">
+				<span>用户名：</span>
+				<input type="text" name="username" id="username" value="" /><br />
+				<span>密&nbsp;&nbsp;&nbsp;码：</span>
+				<input type="password" name="password" id="password" value="" /><br />
+				<input type="button" name="sub" id="sub" value="登录" />
+			</form>
+			<div>
+				<span>没有账号？<a href="/user/register">点击这里</a>注册！</span>
+			</div>
+		</div>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script>
+			$(function(){
+				$('#sub').on('click',function(){
+					$.ajax({
+						type:'post',
+						url:"/users/login",
+						data:{
+							'username':$('#username').val(),
+							'password':$('#password').val(),
+							'sub':'登录'
+						},
+						async:false,
+						error:function(){
+							alert('服务器访问错误！')
+						},
+						success:function(data){
+							if(data !== 'password_wrong'){
+								location.href = 'http://127.0.0.1:3000/main';
+							}else{
+								alert(data);
+							}
+						}
+					});
+				});
+			})
+		</script>
+	</body>
+
+</html>
